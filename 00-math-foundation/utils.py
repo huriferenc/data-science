@@ -1,6 +1,9 @@
 import matplotlib.pyplot as plt
+from matplotlib import image
 import numpy as np
 from sympy import symbols, Eq, Matrix, solve, sympify
+import glob
+import cv2
 
 
 def plot_lines(M):
@@ -301,3 +304,23 @@ def train_nn(parameters, A, X, Y, learning_rate=0.01):
     parameters = update_parameters(parameters, grads, learning_rate)
 
     return parameters
+
+
+def load_images(directory):
+    images = []
+    for filename in glob.glob(directory + "*.jpg"):
+        img = np.array(image.imread(filename))
+        gimg = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        images.append(gimg)
+
+        height, width = gimg.shape
+
+    return images
+
+
+def plot_reduced_data(X):
+    plt.figure(figsize=(12, 12))
+    plt.scatter(X[:, 0], X[:, 1], s=60, alpha=0.5)
+    for i in range(len(X)):
+        plt.text(X[i, 0], X[i, 1], str(i), size=15)
+    plt.show()
